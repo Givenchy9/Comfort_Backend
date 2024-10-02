@@ -11,21 +11,16 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        // Check incoming request data
-        //dd($request->all());
-
         try {
-            // Validate the input
+            // Validate the input (excluding document uploads)
             $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'gender' => 'required|string|in:male,female,other',
-                'birthdate' => 'required|date|before:-18 years', // Ensure user is at least 18
+                'birthdate' => 'required|date|before:-18 years',
                 'address' => 'required|string|max:255',
                 'phone' => 'required|string|max:15',
                 'annual_income' => 'required|numeric|min:0',
-                'income_documents' => 'sometimes|array', // Must be an array of files
-                'income_documents.*' => 'mimes:pdf,jpeg,png|max:5120', // Each file must be a PDF, JPEG, or PNG and max 5MB
                 'preferred_location' => 'required|string|max:255',
                 'radius' => 'required|integer|min:0',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -46,14 +41,6 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-
-            // Handle file uploads (income documents)
-            if ($request->hasFile('income_documents')) {
-                // Ensure it can handle both single and multiple file uploads
-                foreach ($request->file('income_documents') as $document) {
-                    $document->store('income_documents', 'public');
-                }
-            }
 
             // Return a success response
             return response()->json([
