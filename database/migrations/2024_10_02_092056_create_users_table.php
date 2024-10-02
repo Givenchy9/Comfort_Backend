@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->integer('radius');
             $table->string('email')->unique();
             $table->string('password');
-            $table->timestamps();  // Adds created_at and updated_at columns
+            $table->timestamps(); // This includes created_at and updated_at columns
         });
     }
 
