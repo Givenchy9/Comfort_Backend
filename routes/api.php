@@ -8,3 +8,4 @@ use App\Http\Controllers\UserController;
 Route::post('/register', [UserController::class, 'register']);
 Route::put('/edit/{id}', [UserController::class, 'edit']);
 Route::delete('/delete/{id}', [UserController::class, 'delete']);
+Route::get('/info', [UserController::class, 'info']);

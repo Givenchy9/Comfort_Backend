@@ -146,5 +146,24 @@ class UserController extends Controller
         }
     }
 
+    public function info()
+    {
+        try {
+            $users = User::all();
+
+            return response()->json([
+                'message' => 'Users retrieved successfully',
+                'users' => $users
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve users: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Failed to retrieve users',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }
