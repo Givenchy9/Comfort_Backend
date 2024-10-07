@@ -2,10 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\http\controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
-Route::post('/register', [UserController::class, 'register']);
-Route::put('/edit/{id}', [UserController::class, 'edit']);
-Route::delete('/delete/{id}', [UserController::class, 'delete']);
-Route::get('/info', [UserController::class, 'info']);
+// No middleware on the login route
+Route::post('/login', [AuthController::class, 'login']);
+
+// Register and other routes require authentication
+Route::post('/register', [UserController::class, 'register'])->middleware('auth:sanctum');
+Route::put('/edit/{id}', [UserController::class, 'edit'])->middleware('auth:sanctum');
+Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
+Route::get('/info', [UserController::class, 'info'])->middleware('auth:sanctum');
