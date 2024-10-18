@@ -11,7 +11,7 @@ use App\Http\Controllers\HuisController;
 Route::post('/login', [AuthController::class, 'login']);
 
 // Register and other routes require authentication
-Route::post('/register', [UserController::class, 'register'])->middleware('auth:sanctum');
+Route::post('/register', [UserController::class, 'register']);
 Route::put('/edit/{id}', [UserController::class, 'edit'])->middleware('auth:sanctum');
 Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('/info', [UserController::class, 'info'])->middleware('auth:sanctum');
