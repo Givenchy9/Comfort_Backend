@@ -15,5 +15,6 @@ Route::post('/register', [UserController::class, 'register'])->middleware('auth:
 Route::put('/edit/{id}', [UserController::class, 'edit'])->middleware('auth:sanctum');
 Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('/info', [UserController::class, 'info'])->middleware('auth:sanctum');
+Route::get('/info/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/huizen', [HuisController::class, 'huizen']);//->middleware('auth:sanctum');

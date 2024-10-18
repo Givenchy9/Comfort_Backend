@@ -166,4 +166,18 @@ class UserController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Gebruiker niet gevonden',
+                'message' => $e->getMessage(),
+            ], 404);
+        }
+    }
+
+
 }
