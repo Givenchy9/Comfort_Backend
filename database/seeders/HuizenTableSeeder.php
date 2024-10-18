@@ -9,6 +9,6 @@ class HuizenTableSeeder extends Seeder
 {
     public function run()
     {
-        Huis::factory()->count(10)->create();
+        Huis::factory()->count(30)->create();
     }
 }
