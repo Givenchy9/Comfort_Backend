@@ -18,3 +18,4 @@ Route::get('/info', [UserController::class, 'info'])->middleware('auth:sanctum')
 Route::get('/info/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/huizen', [HuisController::class, 'huizen']);//->middleware('auth:sanctum');
+Route::get('/huizen/{id}', [HuisController::class, 'show']);
