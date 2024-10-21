@@ -22,3 +22,4 @@ Route::get('/info/{id}', [UserController::class, 'show'])->middleware('auth:sanc
 Route::get('/huizen', [HuisController::class, 'huizen']);//->middleware('auth:sanctum');
 Route::get('/huizen/{id}', [HuisController::class, 'show']);
 Route::post('/create', [HuisController::class, 'create']);
+Route::put('/huizen/{id}', [HuisController::class, 'update']);
