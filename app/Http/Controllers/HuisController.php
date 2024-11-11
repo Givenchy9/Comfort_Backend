@@ -18,7 +18,7 @@ class HuisController extends Controller
 
     public function show($id)
     {
-        $huis = Huis::find($id);
+        $huis = House::find($id);
 
         if (!$huis) {
             return response()->json(['message' => 'Huis niet gevonden'], 404);
