@@ -6,63 +6,85 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    public function basicRegister(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'registration_status' => 'basic',
+        ]);
+
+        return response()->json(['message' => 'Registration successful', 'user' => $user], 201);
+    }
+
+    public function completeRegister(Request $request)
     {
         try {
-            $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'gender' => 'required|string|in:male,female,other',
-                'birthdate' => 'required|date|before:-18 years',
+            // Check if user is authenticated
+            if (!auth()->check()) {
+                return response()->json([
+                    'message' => 'Unauthorized. Please provide a valid Bearer token.'
+                ], 401);
+            }
+
+            // Validate request data
+            $validator = Validator::make($request->all(), [
+                'gender' => 'required|in:male,female,other',
+                'birthdate' => 'required|date|before:' . now()->subYears(18)->format('Y-m-d'),
+                'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
-                'phone' => 'required|string|max:15',
-                'annual_income' => 'required|numeric|min:0',
-                'preferred_location' => 'required|string|max:255',
-                'radius' => 'required|integer|min:0',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8',
+                'preferred_location' => 'nullable|string|max:255',
             ]);
 
-            $user = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+            // Return validation errors
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Retrieve authenticated user
+            $user = auth()->user();
+
+            // Update user profile
+            $user->update([
                 'gender' => $request->gender,
                 'birthdate' => $request->birthdate,
-                'address' => $request->address,
                 'phone' => $request->phone,
-                'annual_income' => $request->annual_income,
+                'address' => $request->address,
                 'preferred_location' => $request->preferred_location,
-                'radius' => $request->radius,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'registration_status' => 'complete',
             ]);
 
-
+            // Return success response
             return response()->json([
-                'message' => 'User registered successfully',
+                'message' => 'Profile completed successfully',
                 'user' => $user
-            ], 201);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $e->errors(),
-            ], 422);
-
+            ], 200);
         } catch (\Exception $e) {
-
-            Log::error('User registration failed: ' . $e->getMessage());
-
+            // Handle unexpected errors
             return response()->json([
-                'error' => 'Registration failed',
-                'message' => $e->getMessage(),
+                'message' => 'An error occurred during profile completion',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
+
+
 
     public function edit(Request $request, $id)
     {

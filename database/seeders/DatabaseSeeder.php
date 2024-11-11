@@ -9,9 +9,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // Roep hier de HuizenTableSeeder aan
-        $this->call(HuizenTableSeeder::class);
-    }
+    public function run()
+{
+    $this->call(HouseSeeder::class);
+}
 }

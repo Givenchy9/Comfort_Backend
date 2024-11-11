@@ -10,29 +10,25 @@ class HuisController extends Controller
 {
     public function huizen()
     {
-        // Haal alle huizen op
+
         $huizen = Huis::all();
-        // Return de huizen als JSON-response
+
         return response()->json($huizen);
     }
 
     public function show($id)
     {
-        // Haal het specifieke huis op op basis van het ID
         $huis = Huis::find($id);
 
-        // Controleer of het huis bestaat
         if (!$huis) {
             return response()->json(['message' => 'Huis niet gevonden'], 404);
         }
 
-        // Return het specifieke huis als JSON-response
         return response()->json($huis);
     }
     
     public function create(Request $request)
     {
-        // Validate the incoming request
         $validated = $request->validate([
             'straatnaam' => 'required|string|max:255',
             'postcode' => 'required|string|max:10',
@@ -55,10 +51,8 @@ class HuisController extends Controller
             'zonnepanelen' => 'required|string|in:ja,nee',
         ]);
 
-        // Create a new house record in the database
         $huizen = Huis::create($validated);
 
-        // Return a response
         return response()->json([
             'message' => 'House created successfully',
             'huis' => $huizen,
@@ -67,15 +61,12 @@ class HuisController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Haal het huis op dat moet worden bijgewerkt
         $huis = Huis::find($id);
 
-        // Controleer of het huis bestaat
         if (!$huis) {
             return response()->json(['message' => 'Huis niet gevonden'], 404);
         }
 
-        // Valideer de inkomende gegevens
         $validated = $request->validate([
             'straatnaam' => 'required|string|max:255',
             'postcode' => 'required|string|max:10',
@@ -98,10 +89,8 @@ class HuisController extends Controller
             'zonnepanelen' => 'required|string|in:ja,nee',
         ]);
 
-        // Werk het huis bij met de gevalideerde gegevens
         $huis->update($validated);
 
-        // Geef een JSON-response terug
         return response()->json([
             'message' => 'Huis bijgewerkt',
             'huis' => $huis,
