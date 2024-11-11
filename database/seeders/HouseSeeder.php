@@ -9,11 +9,11 @@ class HouseSeeder extends Seeder
 {
     public function run()
     {
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             DB::table('huizen')->insert([
                 'straatnaam' => fake('nl_NL')->streetName,
                 'postcode' => fake('nl_NL')->postcode,
-                'huisnummer' => fake('nl_NL')->buildingNumber,
+                'huisnummer' => fake()->numberBetween(50, 300),
                 'prijs' => fake()->randomFloat(2, 100000, 1000000),
                 'type' => fake()->randomElement(['koop', 'huur']),
                 'oppervlakte_huis' => fake()->numberBetween(50, 300),
