@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Huis;
+use App\Models\House;
 use Illuminate\Http\Request;
 
 class HuisController extends Controller
@@ -11,7 +11,7 @@ class HuisController extends Controller
     public function huizen()
     {
 
-        $huizen = Huis::all();
+        $huizen = House::all();
 
         return response()->json($huizen);
     }
@@ -51,7 +51,7 @@ class HuisController extends Controller
             'zonnepanelen' => 'required|string|in:ja,nee',
         ]);
 
-        $huizen = Huis::create($validated);
+        $huizen = House::create($validated);
 
         return response()->json([
             'message' => 'House created successfully',
@@ -61,7 +61,7 @@ class HuisController extends Controller
 
     public function update(Request $request, $id)
     {
-        $huis = Huis::find($id);
+        $huis = House::find($id);
 
         if (!$huis) {
             return response()->json(['message' => 'Huis niet gevonden'], 404);

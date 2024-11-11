@@ -9,7 +9,10 @@ class House extends Model
 {
     use HasFactory;
 
-    // Voeg optioneel fillable-velden toe als je die gebruikt
+    // Specify the table name explicitly
+    protected $table = 'Huizen';
+
+    // Optional: Add fillable fields if you use mass assignment
     protected $fillable = [
         'straatnaam',
         'postcode',
