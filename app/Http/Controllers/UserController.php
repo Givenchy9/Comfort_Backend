@@ -12,23 +12,60 @@ class UserController extends Controller
 {
     public function basicRegister(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ]);
+        try {
+            // Custom validation messages
+            $customMessages = [
+                'first_name.required' => 'First name is required.',
+                'first_name.string' => 'First name must be a string.',
+                'first_name.max' => 'First name cannot exceed 255 characters.',
+                'last_name.required' => 'Last name is required.',
+                'last_name.string' => 'Last name must be a string.',
+                'last_name.max' => 'Last name cannot exceed 255 characters.',
+                'email.required' => 'Email address is required.',
+                'email.email' => 'Please provide a valid email address.',
+                'email.unique' => 'This email address is already registered.',
+                'password.required' => 'Password is required.',
+                'password.string' => 'Password must be a string.',
+                'password.min' => 'Password must be at least 8 characters long.',
+            ];
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'registration_status' => 'basic',
-        ]);
+            // Validate the request
+            $validatedData = $request->validate([
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8',
+            ], $customMessages);
 
-        return response()->json(['message' => 'Registration successful', 'user' => $user], 201);
+            // Create the user
+            $user = User::create([
+                'first_name' => $validatedData['first_name'],
+                'last_name' => $validatedData['last_name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+            ]);
+
+            // Return success response
+            return response()->json([
+                'message' => 'Registration successful.',
+                'user' => $user
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation error response
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            // Return generic error response for other exceptions
+            return response()->json([
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function completeRegister(Request $request)
     {
