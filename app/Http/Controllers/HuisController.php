@@ -96,4 +96,18 @@ class HuisController extends Controller
             'huis' => $huis,
         ], 200);
     }
+
+    public function delete($id)
+    {
+        $huis = House::find($id);
+
+        if (!$huis) {
+            return response()->json(['message' => 'Huis niet gevonden'], 404);
+        }
+
+        $huis->delete();
+
+        return response()->json(['message' => 'Huis succesvol verwijderd'], 200);
+    }
+
 }
