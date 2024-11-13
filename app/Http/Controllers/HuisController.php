@@ -110,25 +110,33 @@ class HuisController extends Controller
         return response()->json(['message' => 'Huis succesvol verwijderd'], 200);
     }
 
-    public function createpicture(Request $request)
+    public function createpicture(Request $request, $id)
     {
         $validated = $request->validate([
-            // other validations
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate picture
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate the uploaded image
         ]);
 
-        if ($request->hasFile('picture')) {
-            $picturePath = $request->file('picture')->store('houses', 'public');
-            $validated['picture'] = $picturePath;
+        // Find the existing house by ID
+        $huis = House::find($id);
+
+        if (!$huis) {
+            return response()->json(['message' => 'Huis niet gevonden'], 404);
         }
 
-        $huis = House::create($validated);
+        // Handle the picture upload
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('houses', 'public'); // Store picture in public/houses directory
+
+            // Save the picture in the house_pictures table
+            $huis->pictures()->create(['picture' => $picturePath]); // Assuming a pictures relationship exists
+        }
 
         return response()->json([
-            'message' => 'House created successfully',
-            'huis' => $huis,
-        ], 201);
+            'message' => 'Picture added successfully to the house',
+            'huis' => $huis->load('pictures'), // Include pictures in the response
+        ]);
     }
+
 
     public function createpictures(Request $request)
     {

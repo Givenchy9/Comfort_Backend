@@ -9,10 +9,8 @@ class House extends Model
 {
     use HasFactory;
 
-    // Specify the table name explicitly
-    protected $table = 'Huizen';
+    protected $table = 'huizen';
 
-    // Optional: Add fillable fields if you use mass assignment
     protected $fillable = [
         'straatnaam',
         'postcode',
@@ -33,11 +31,11 @@ class House extends Model
         'zwembad',
         'tuin',
         'zonnepanelen',
-        'picture',
     ];
 
+    // Add this relationship
     public function pictures()
     {
-        return $this->hasMany(HousePicture::class); // For multiple pictures
+        return $this->hasMany(HousePicture::class); // This assumes the new `house_pictures` table will be created
     }
 }
