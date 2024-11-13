@@ -10,15 +10,17 @@ class HuisController extends Controller
 {
     public function huizen()
     {
-
-        $huizen = House::all();
+        // Include the pictures relationship for all houses
+        $huizen = House::with('pictures')->get();
 
         return response()->json($huizen);
     }
 
+
     public function show($id)
     {
-        $huis = House::find($id);
+        // Include the pictures relationship using "with"
+        $huis = House::with('pictures')->find($id);
 
         if (!$huis) {
             return response()->json(['message' => 'Huis niet gevonden'], 404);
@@ -26,6 +28,7 @@ class HuisController extends Controller
 
         return response()->json($huis);
     }
+
     
     public function create(Request $request)
     {
