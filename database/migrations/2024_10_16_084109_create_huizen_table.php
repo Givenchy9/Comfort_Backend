@@ -34,6 +34,19 @@ return new class extends Migration
             $table->enum('zonnepanelen', ['ja', 'nee']);
             $table->timestamps();
         });
+
+        Schema::table('huizen', function (Blueprint $table) {
+            $table->string('picture')->nullable(); // Path to the picture
+        });
+
+        Schema::create('house_pictures', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('house_id')->constrained('huizen')->onDelete('cascade');
+            $table->string('picture'); // Path to the picture
+            $table->timestamps();
+        });
+        
+        
     }
 
     

@@ -96,4 +96,60 @@ class HuisController extends Controller
             'huis' => $huis,
         ], 200);
     }
+
+    public function delete($id)
+    {
+        $huis = House::find($id);
+
+        if (!$huis) {
+            return response()->json(['message' => 'Huis niet gevonden'], 404);
+        }
+
+        $huis->delete();
+
+        return response()->json(['message' => 'Huis succesvol verwijderd'], 200);
+    }
+
+    public function createpicture(Request $request)
+    {
+        $validated = $request->validate([
+            // other validations
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate picture
+        ]);
+
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('houses', 'public');
+            $validated['picture'] = $picturePath;
+        }
+
+        $huis = House::create($validated);
+
+        return response()->json([
+            'message' => 'House created successfully',
+            'huis' => $huis,
+        ], 201);
+    }
+
+    public function createpictures(Request $request)
+    {
+        $validated = $request->validate([
+            // other validations
+            'pictures.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate pictures
+        ]);
+
+        $huis = House::create($validated);
+
+        if ($request->hasFile('pictures')) {
+            foreach ($request->file('pictures') as $picture) {
+                $picturePath = $picture->store('houses', 'public');
+                $huis->pictures()->create(['picture' => $picturePath]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'House created successfully',
+            'huis' => $huis->load('pictures'),
+        ], 201);
+    }
+
 }

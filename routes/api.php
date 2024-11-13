@@ -24,3 +24,4 @@ Route::get('/huizen', [HuisController::class, 'huizen']);
 Route::get('/huizen/{id}', [HuisController::class, 'show']);
 Route::post('/create', [HuisController::class, 'create'])->middleware('auth:sanctum');
 Route::put('/huizen/{id}', [HuisController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/delete/{id}', [HuisController::class, 'delete']);//->middleware('auth:sanctum');

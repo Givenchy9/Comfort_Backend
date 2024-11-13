@@ -33,5 +33,11 @@ class House extends Model
         'zwembad',
         'tuin',
         'zonnepanelen',
+        'picture',
     ];
+
+    public function pictures()
+    {
+        return $this->hasMany(HousePicture::class); // For multiple pictures
+    }
 }
