@@ -9,7 +9,7 @@ class HouseSeeder extends Seeder
 {
     public function run()
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             DB::table('huizen')->insert([
                 'straatnaam' => fake('nl_NL')->streetName,
                 'postcode' => fake('nl_NL')->postcode,
