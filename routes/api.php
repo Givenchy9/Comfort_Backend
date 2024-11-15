@@ -14,10 +14,10 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 // User controller
 Route::post('/basicregister', [UserController::class, 'basicRegister']);
 Route::post('/completeregister', [UserController::class, 'completeRegister'])->middleware('auth:sanctum');
-Route::put('/edit/{id}', [UserController::class, 'edit'])->middleware('auth:sanctum');
-Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
-Route::get('/info', [UserController::class, 'info'])->middleware('auth:sanctum');
-Route::get('/info/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
+Route::put('/edituser/{id}', [UserController::class, 'edit'])->middleware('auth:sanctum');
+Route::delete('/deleteuser/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
+Route::get('/allusers', [UserController::class, 'info'])->middleware('auth:sanctum');
+Route::get('/userinfo/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 
 // Huis controller
 Route::get('/huizen', [HuisController::class, 'huizen']);
