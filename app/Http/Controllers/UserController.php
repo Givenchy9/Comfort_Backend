@@ -128,17 +128,15 @@ class UserController extends Controller
     {
         try {
             $request->validate([
-                'first_name' => 'sometimes|required|string|max:255',
-                'last_name' => 'sometimes|required|string|max:255',
-                'gender' => 'sometimes|required|string|in:male,female,other',
-                'birthdate' => 'sometimes|required|date|before:-18 years',
-                'address' => 'sometimes|required|string|max:255',
-                'phone' => 'sometimes|required|string|max:15',
-                'annual_income' => 'sometimes|required|numeric|min:0',
-                'preferred_location' => 'sometimes|required|string|max:255',
-                'radius' => 'sometimes|required|integer|min:0',
-                'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
-                'password' => 'sometimes|required|string|min:8',
+                'first_name' => 'sometimes|string|max:255',
+                'last_name' => 'sometimes|string|max:255',
+                'gender' => 'sometimes|string|in:male,female,other',
+                'birthdate' => 'sometimes|date|before:-18 years',
+                'address' => 'sometimes|string|max:255',
+                'phone' => 'sometimes|string|max:15',
+                'preferred_location' => 'sometimes|string|max:255',
+                'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
+                'password' => 'sometimes|string|min:8',
             ]);
 
             $user = User::findOrFail($id);
@@ -149,9 +147,7 @@ class UserController extends Controller
             $user->birthdate = $request->input('birthdate', $user->birthdate);
             $user->address = $request->input('address', $user->address);
             $user->phone = $request->input('phone', $user->phone);
-            $user->annual_income = $request->input('annual_income', $user->annual_income);
             $user->preferred_location = $request->input('preferred_location', $user->preferred_location);
-            $user->radius = $request->input('radius', $user->radius);
             $user->email = $request->input('email', $user->email);
 
             if ($request->has('password')) {
