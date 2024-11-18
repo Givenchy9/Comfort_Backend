@@ -24,10 +24,10 @@ class CreateUsersTable extends Migration
             $table->string('preferred_location')->nullable(); // Optional
             $table->string('email')->unique();
             $table->string('password');
+            $table->enum('role', ['basic', 'complete', 'admin'])->default('basic'); // Role column with default value 'basic'
             $table->timestamps(); // Includes created_at and updated_at columns
         });
     }
-
 
     /**
      * Reverse the migrations.
